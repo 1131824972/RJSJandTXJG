@@ -12,15 +12,16 @@ import java.util.List;
 public interface StudentDao extends LogicDAO<Student, Long> {
 
     /**
-     * 自定义查询：获取某个学生(stu)所选的所有教学班(TClass)
-     * * JPQL解析：
-     * from Selection s   -> 从 Selection 实体中查询
-     * where s.student = :stu -> 筛选出 student 属性等于参数 stu 的记录
-     * select s.tclass    -> 返回这些记录中的 tclass 属性
+     * 功能：获取某个学生(stu)所选的所有教学班(TClass)
      */
     @Query(value = "select s.tclass from Selection s where s.student = :stu")
     List<TClass> getMyClasses(@Param(value = "stu") Student stu);
 
-    // 也可以使用 DQM (Derived Query Methods) 方式，虽然方法名会比较长，但也能实现：
-    // List<Student> findByStudentName(String studentName);
+    /**
+     * Spring Data JPA 会自动解析方法名生成 SQL：select * from student where student_name = ?
+     */
+    List<Student> findByStudentName(String studentName);
+
+    // 如果你需要用用户名登录，也可以保留这个 DQM 方法
+    Student findByUsername(String username);
 }
