@@ -12,6 +12,7 @@ import java.util.Set;
 @Setter
 @Entity
 @DiscriminatorValue("1")  // 单表继承：type=1表示教师（实验二约定）
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class Teacher extends User {
 
     @Column(length = 50)  // 适配实验一数据库UTF-8

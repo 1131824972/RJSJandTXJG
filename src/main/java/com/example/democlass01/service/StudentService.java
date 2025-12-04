@@ -3,6 +3,7 @@ package com.example.democlass01.service;
 import com.example.democlass01.entity.Selection;
 import com.example.democlass01.entity.Student;
 import com.example.democlass01.entity.TClass;
+import com.example.democlass01.repository.SelectionDao;
 import com.example.democlass01.repository.StudentDao;
 import com.example.democlass01.repository.TClassDao;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +21,8 @@ public class StudentService extends LogicService<Student, Long> {
     @Resource
     private TClassDao tClassDao; // 需要用到教学班DAO来查找班级
 
+    @Resource
+    private SelectionDao selectionDao;
     public StudentService(@Autowired StudentDao dao) {
         super(dao);
         this.studentDao = dao;
@@ -58,12 +61,21 @@ public class StudentService extends LogicService<Student, Long> {
         Student student = studentDao.getReferenceById(stuId);
         TClass tClass = tClassDao.getReferenceById(clsId);
 
-        // 调用模型层的退课逻辑
-        Selection selection = student.withdraw(tClass);
+        // 1. 找到要退的选课记录
+        Selection selection = null;
+        for(Selection sel : student.getSelections()){
+            if(sel.getTclass().getId().equals(clsId)){
+                selection = sel;
+                break;
+            }
+        }
 
-        // 级联保存，OrphanRemoval=true 会自动删除那条Selection记录
         if (selection != null) {
-            studentDao.save(student);
+            // 2.【关键】调用 DAO 的 delete 方法，触发 LogicDAO 的软删除逻辑
+            selectionDao.delete(selection);
+
+            // 3. 维护内存中的对象状态（可选，为了保持一致性）
+            student.getSelections().remove(selection);
         }
         return selection;
     }

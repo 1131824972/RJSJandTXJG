@@ -1,5 +1,6 @@
 package com.example.democlass01.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.Where;
@@ -12,6 +13,7 @@ import javax.persistence.*;
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @DiscriminatorColumn(name = "type")  // 区分学生/教师
 @Where(clause = "is_deleted=0")
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public abstract class User extends LogicEntity {
 
     @Column(length = 50)

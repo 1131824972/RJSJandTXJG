@@ -14,6 +14,7 @@ import java.util.Set;
 @Setter
 @Entity
 @DiscriminatorValue("0")  // 单表继承：type=0表示学生
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class Student extends User {
 
     @Column(length = 50)  // 适配实验一数据库UTF-8
@@ -32,7 +33,7 @@ public class Student extends User {
     @OneToMany(
             mappedBy = "student",  // 由Selection的student维护关联（外键在selection表）
             fetch = FetchType.LAZY,  // 实验一JPA支持延迟加载
-            orphanRemoval = true,  // 移除选课时自动删除Selection（实验二业务需求）
+            //orphanRemoval = true,  // 移除选课时自动删除Selection（实验二业务需求）
             cascade = CascadeType.ALL  // 级联保存/删除（实验二业务需求）
     )
     @JsonIgnoreProperties(value = {"student"})  // 解决循环引用（实验二新增Jackson配置生效）
@@ -59,7 +60,7 @@ public class Student extends User {
 
         // 4. 维护双向关联（实验二关联一致性要求）
         this.selections.add(newSel);
-        tClass.getSelections().add(newSel);
+        //tClass.getSelections().add(newSel);
 
         return newSel;  // 选课成功
     }

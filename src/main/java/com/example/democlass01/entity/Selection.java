@@ -10,7 +10,8 @@ import javax.persistence.*;
 @Getter
 @Setter
 @Entity
-@Where(clause = "is_deleted=0")  // 过滤未删除选课记录（实验一数据库支持）
+@Where(clause = "is_deleted=0")  // 过滤未删除选课记录
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class Selection extends LogicEntity {
 
     private Double midScore;  // 期中成绩（可null）

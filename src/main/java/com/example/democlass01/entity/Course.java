@@ -13,6 +13,7 @@ import java.util.Set;
 @Setter
 @Entity
 @Where(clause = "is_deleted=0")  // 过滤未删除课程（实验一数据库支持SQL条件）
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class Course extends LogicEntity {
 
     @Column(length = 100, nullable = false)  // 适配实验一数据库UTF-8，课程名非空

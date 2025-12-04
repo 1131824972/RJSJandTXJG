@@ -18,5 +18,5 @@ public abstract class LogicEntity extends BaseEntity {
 
     // 逻辑删除标记：0=未删，1=已删（默认0）
     @Column(insertable = false, nullable = false, columnDefinition = "INT default 0")
-    protected Integer isDeleted;
+    protected Integer isDeleted = 0;
 }

@@ -15,6 +15,7 @@ import java.util.Set;
 @Setter
 @Entity
 @Where(clause = "is_deleted=0")  // 过滤未删除教学班（实验一数据库支持）
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class TClass extends LogicEntity {
 
     @Column(length = 50)  // 适配实验一数据库UTF-8
